@@ -1,11 +1,13 @@
 {
-  "name": "sesion15",
+  "name": "sesion21-server",
   "version": "1.0.0",
-  "description": "Sesion 15 de Express.js",
+  "description": "Sesion 21 de Express.js",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js --ignore 'data/*'"
+    "start": "node server.js",
+    "dev": "nodemon server.js --ignore 'data/*'",
+    "build": "echo 'No build step required'"
   },
   "keywords": [
     "express.js"

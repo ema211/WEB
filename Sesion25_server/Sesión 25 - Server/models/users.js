@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-let mongoDB = 'mongodb://localhost:27017/UsersDB';
-let privateKey = process.env.TOKEN_KEY;
+let mongoDB = process.env.MONGODB_URI || 'mongodb://localhost:27017/UsersDB';
+let privateKey = process.env.TOKEN_KEY || "Welcome1234";
 
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 
@@ -34,20 +34,21 @@ let userSchema = mongoose.Schema({
     role: {
         type: String,
         enum: ['ADMIN', 'USER', 'GUEST'],
-        required: true
+        default: 'USER'
     },
 });
 
 userSchema.pre('save', function(next) {
     let user = this;
+    if (!user.isModified('password')) return next();
     user.password = bcrypt.hashSync(user.password, 10);
     next();
-})
+});
 
 userSchema.methods.generateToken = function(password) {
     let user = this;
     let payload = {_id: user._id, role: user.role};
-    let options = { expiresIn: 60 * 60 }
+    let options = { expiresIn: 60 * 60 };
     if (bcrypt.compareSync(password, user.password)) {
         try {
             user.token = jwt.sign(payload, privateKey, options);
@@ -56,7 +57,7 @@ userSchema.methods.generateToken = function(password) {
             console.log(err);
         }
     }
-}
+};
 
 let User = mongoose.model('user', userSchema);
 

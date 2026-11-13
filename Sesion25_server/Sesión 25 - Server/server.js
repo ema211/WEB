@@ -1,18 +1,21 @@
 "use strict";
 
-process.env.TOKEN_KEY = "Welcome1234"
+process.env.TOKEN_KEY = process.env.TOKEN_KEY || "Welcome1234";
 
 const express = require('express');
 const router = require('./controllers/router');
 const loginRouter = require('./controllers/login_router');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const cors = require('cors');
 
 app.use(cors({
-  origin: ['http://127.0.0.1:5500']
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'x-auth', 'Authorization']
 }));
-app.use(express.json()); // Use express body-parser to parse all request bodies.
+
+app.use(express.json());
 app.use(loginRouter);
 app.use('/api/users', router);
 
@@ -25,4 +28,4 @@ app.route('/home').get(
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
-})
+});
