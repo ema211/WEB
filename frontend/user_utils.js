@@ -1,9 +1,7 @@
 "use strict";
 
 let userContainer = document.getElementById('userList');
-const usersUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3000/api/users/'
-    : 'https://usersapp-dasw.onrender.com/api/users/';
+const usersUrl = 'https://web-oqok.onrender.com/api/users/';
 
 function userToHTML(user) {
     return `
